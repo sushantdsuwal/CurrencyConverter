@@ -1,11 +1,14 @@
+import { PersistGate } from 'redux-persist/es/integration/react';
+
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Provider as StoreProvider} from 'react-redux';
+import { StyleSheet, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Provider as StoreProvider } from 'react-redux';
+
 import RootNavigator from '~/navigator';
 import configureStore from '~/redux/store';
-import {ThemeProvider} from '~/theme/ThemeContext';
-import { PersistGate } from 'redux-persist/es/integration/react';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import { ThemeProvider } from '~/theme/ThemeContext';
 
 const { persistor, store } = configureStore();
 
@@ -27,9 +30,9 @@ export default function App(): JSX.Element {
     <StoreProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
             <RootNavigator />
-          </View>
+          </SafeAreaView>
         </ThemeProvider>
       </PersistGate>
     </StoreProvider>

@@ -1,3 +1,6 @@
+import { useNavigation } from '@react-navigation/core';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import React from 'react';
 import { StatusBar, KeyboardAvoidingView } from 'react-native';
 
@@ -7,6 +10,7 @@ import { Header } from '~/components/common/Header';
 import { Logo } from '~/components/common/Logo';
 import { LastConverted } from '~/components/common/Text';
 import { InputWithButton } from '~/components/common/TextInput';
+import { RootStackParamList } from '~/navigator';
 import {
   currenciesState,
   onChangeCurrencyAmount,
@@ -15,7 +19,13 @@ import {
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
 
+export type HomeScreenNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home'
+>;
+
 export default function HomeScreen(): JSX.Element {
+  const navigation = useNavigation<HomeScreenNavigationProps>();
   const dispatch = useAppDispatch();
   const { primaryColor } = useAppSelector(themeState);
   const { baseCurrency, quoteCurrency, conversions, amount } =
@@ -33,11 +43,10 @@ export default function HomeScreen(): JSX.Element {
   if (!isFetching) {
     quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2);
   }
-
   return (
     <Container backgroundColor={primaryColor}>
       <StatusBar backgroundColor="blue" barStyle="light-content" />
-      <Header onPress={() => console.log('navigate')} />
+      <Header onPress={() => navigation.navigate('Option')} />
       <KeyboardAvoidingView behavior="padding">
         <Logo tintColor={primaryColor} />
         <InputWithButton

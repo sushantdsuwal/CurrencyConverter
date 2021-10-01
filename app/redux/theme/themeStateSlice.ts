@@ -10,17 +10,17 @@ const initialState: IThemeState = {
   primaryColor: '#4F6D7A',
 };
 
-export const appStateSlice = createSlice({
+export const themeStateSlice = createSlice({
   name: 'themeState',
   initialState,
   reducers: {
-    onChangePrimaryColor: (state, action: PayloadAction<IThemeState>) => {
-      return { ...state, primaryColor: action.payload.primaryColor };
+    onChangePrimaryColor: (state, action: PayloadAction<string>) => {
+      return { ...state, primaryColor: action.payload };
     },
   },
 });
 
-export const { onChangePrimaryColor } = appStateSlice.actions;
+export const { onChangePrimaryColor } = themeStateSlice.actions;
 export const themeState = (state: RootState): IThemeState => state.themeState;
 
-export default appStateSlice.reducer;
+export default themeStateSlice.reducer;
