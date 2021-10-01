@@ -1,8 +1,11 @@
-import appState from './appState/appStateSlice';
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
+
+import currenciesState from './currencies/currenciesStateSlice';
+import themeState from './theme/themeStateSlice';
 
 const appReducer = combineReducers({
-  appState,
+  themeState,
+  currenciesState,
 });
 
 export default appReducer;

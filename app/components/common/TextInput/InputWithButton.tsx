@@ -1,18 +1,28 @@
 import PropTypes from 'prop-types';
+
 import React from 'react';
-import { View, TextInput, TouchableHighlight, Text } from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableHighlight,
+  Text,
+  KeyboardTypeOptions,
+} from 'react-native';
 
 import styles from './styles';
 
 interface InputWithButton {
-  textColor: string;
-  editable: boolean;
+  textColor?: string;
+  editable?: boolean;
   onPress: () => void;
-buttonText: string;
+  buttonText: string;
+  defaultValue?: string | undefined;
+  keyboardType?: KeyboardTypeOptions | undefined;
+  onChangeText?: ((text: string) => void) | undefined;
+  value?: string | undefined;
 }
 
-const InputWithButton = (props:InputWithButton): JSX.Element => {
-
+const InputWithButton = (props: InputWithButton): JSX.Element => {
   const containerStyles = [styles.container];
   if (props.editable === false) {
     containerStyles.push(styles.containerDisabled);
@@ -32,7 +42,11 @@ const InputWithButton = (props:InputWithButton): JSX.Element => {
         <Text style={buttonTextStyles}>{props.buttonText}</Text>
       </TouchableHighlight>
       <View style={styles.separator} />
-      <TextInput style={styles.input} underlineColorAndroid="transparent" {...props} />
+      <TextInput
+        style={styles.input}
+        underlineColorAndroid="transparent"
+        {...props}
+      />
     </View>
   );
 };
