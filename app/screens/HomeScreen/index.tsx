@@ -38,8 +38,21 @@ export default function HomeScreen(): JSX.Element {
     : new Date();
   const isFetching = conversionSelector.isFetching;
 
-  let quotePrice = '...';
+  const handlePressBaseCurrency = () => {
+    navigation.navigate('CurrencyList', {
+      title: 'Base Currency',
+      type: 'base',
+    });
+  };
 
+  const handlePressQuoteCurrency = () => {
+    navigation.navigate('CurrencyList', {
+      title: 'Quote Currency',
+      type: 'quote',
+    });
+  };
+
+  let quotePrice = '...';
   if (!isFetching) {
     quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2);
   }
@@ -51,18 +64,16 @@ export default function HomeScreen(): JSX.Element {
         <Logo tintColor={primaryColor} />
         <InputWithButton
           buttonText={baseCurrency}
-          onPress={() => console.log('')}
+          onPress={handlePressBaseCurrency}
           defaultValue={amount.toString()}
           keyboardType="numeric"
           onChangeText={text => dispatch(onChangeCurrencyAmount(Number(text)))}
           textColor={primaryColor}
         />
         <InputWithButton
+          onPress={handlePressQuoteCurrency}
           editable={false}
           buttonText={quoteCurrency}
-          onPress={() => {
-            console.log('aa');
-          }}
           value={quotePrice}
           textColor={primaryColor}
         />

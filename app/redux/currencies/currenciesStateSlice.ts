@@ -98,12 +98,12 @@ export const currenciesStateSlice = createSlice({
         quoteCurrency: state.baseCurrency,
       };
     },
-    changeBaseCurrency: (state, action: PayloadAction<ICurrenciesState>) => {
-      state.baseCurrency = action.payload.baseCurrency;
+    changeBaseCurrency: (state, action: PayloadAction<string>) => {
+      state.baseCurrency = action.payload;
       state.conversions = setConversions(state, action);
     },
-    changeQuoteCurrency: (state, action: PayloadAction<ICurrenciesState>) => {
-      state.quoteCurrency = action.payload.quoteCurrency;
+    changeQuoteCurrency: (state, action: PayloadAction<string>) => {
+      state.quoteCurrency = action.payload;
       state.conversions = setConversions(state, action);
     },
   },
