@@ -1,24 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AppThunk, RootState } from '../store';
+import { RootState } from '../store';
 
 export interface IConversions {
-  conversions: {
-    [key: string]: {
-      isFetching?: boolean;
-      base: string;
-      date: string;
-      rates: {
-        [key: string]: number;
-      };
-    };
+  isFetching?: boolean;
+  base: string;
+  date: string;
+  rates: {
+    [key: string]: number;
   };
+  [key: string]: any;
 }
-
-export interface ICurrenciesState extends IConversions {
+export interface ICurrenciesState {
   baseCurrency: string;
   quoteCurrency: string;
   amount: number;
+  conversions: {
+    [key: string]: IConversions;
+  };
 }
 
 const initialState: ICurrenciesState = {
@@ -67,21 +66,21 @@ const initialState: ICurrenciesState = {
   },
 };
 
-const setConversions = (state: any, action: any) => {
-  let conversion = {
-    isFetching: true,
-    date: '',
-    rates: {},
-  };
-
-  if (state.conversions[action.currency]) {
-    conversion = state.conversions[action.payload.baseCurrency];
+const setConversions = (state: ICurrenciesState, conversion: IConversions) => {
+  if (state.conversions[conversion.base]) {
+    console.log('i am same');
+    const copyConversions = { ...state.conversions };
+    copyConversions[conversion.base] = conversion;
+    return {
+      ...copyConversions,
+    };
+  } else {
+    console.log('i am not same');
+    return {
+      ...state.conversions,
+      [conversion.base]: conversion,
+    };
   }
-
-  return {
-    ...state.conversions,
-    [action.payload.baseCurrency]: conversion,
-  };
 };
 
 export const currenciesStateSlice = createSlice({
@@ -98,13 +97,17 @@ export const currenciesStateSlice = createSlice({
         quoteCurrency: state.baseCurrency,
       };
     },
-    changeBaseCurrency: (state, action: PayloadAction<string>) => {
-      state.baseCurrency = action.payload;
-      state.conversions = setConversions(state, action);
+    changeBaseCurrency: (state, action: PayloadAction<IConversions>) => {
+      // state.baseCurrency = action.payload;
+      setConversions(state, action.payload);
+      // state.conversions = setConversions(state, action.payload);
     },
     changeQuoteCurrency: (state, action: PayloadAction<string>) => {
       state.quoteCurrency = action.payload;
-      state.conversions = setConversions(state, action);
+    },
+    updateConversion: (state, action: PayloadAction<IConversions>) => {
+      state.baseCurrency = action.payload.base;
+      state.conversions = setConversions(state, action.payload);
     },
   },
 });
@@ -114,6 +117,7 @@ export const {
   onSwapCurrency,
   changeBaseCurrency,
   changeQuoteCurrency,
+  updateConversion,
 } = currenciesStateSlice.actions;
 
 export const currenciesState = (state: RootState): ICurrenciesState =>

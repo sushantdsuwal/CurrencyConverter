@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, KeyboardAvoidingView } from 'react-native';
 
 import { ClearButton } from '~/components/common/Button';
@@ -15,6 +16,7 @@ import {
   currenciesState,
   onChangeCurrencyAmount,
   onSwapCurrency,
+  updateConversion,
 } from '~/redux/currencies/currenciesStateSlice';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
@@ -52,10 +54,30 @@ export default function HomeScreen(): JSX.Element {
     });
   };
 
+  console.log('conversions', conversions);
+
+  const getCurrencyList = async () => {
+    try {
+      const API_KEY = '9222a6c30c7648b9279191d83dcfeda7';
+      const currencyList = await axios.get(
+        `http://data.fixer.io/api/latest?access_key=${API_KEY}`,
+      );
+      console.log('currencyList', currencyList.data);
+      dispatch(updateConversion(currencyList.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrencyList();
+  }, []);
+
   let quotePrice = '...';
   if (!isFetching) {
     quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2);
   }
+
   return (
     <Container backgroundColor={primaryColor}>
       <StatusBar backgroundColor="blue" barStyle="light-content" />

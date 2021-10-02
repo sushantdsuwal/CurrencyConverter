@@ -1,14 +1,16 @@
-import rootReducer from './rootReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
-import {persistReducer} from 'redux-persist';
-import {persistStore} from 'redux-persist';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
+
+import rootReducer from './rootReducer';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['crewmember', 'tipReports'],
+  whitelist: ['themeState', 'currenciesState'],
+  // blacklist: [],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -24,12 +26,11 @@ function config() {
         },
         serializableCheck: false,
       }),
-    // middleware: [thunk],
   });
   const persistor = persistStore(store);
-  return {persistor, store};
+  return { persistor, store };
 }
-const {store} = config();
+const { store } = config();
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import React from 'react';
 import { FlatList, StatusBar, View } from 'react-native';
@@ -14,25 +14,18 @@ import {
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
 
-import currencies from './data';
-
-export type CurrencyListNavigationProps = NativeStackNavigationProp<
+type CurrencyListScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'CurrencyList'
 >;
-
-interface CurrencyListScreenProps {
-  route: {
-    params: RootStackParamList['CurrencyList'];
-  };
-}
 
 export default function CurrencyListScreen({
   route,
 }: CurrencyListScreenProps): JSX.Element {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const { baseCurrency, quoteCurrency } = useAppSelector(currenciesState);
+  const { baseCurrency, quoteCurrency, conversions } =
+    useAppSelector(currenciesState);
   const { primaryColor } = useAppSelector(themeState);
 
   const { type } = route.params;
@@ -40,7 +33,7 @@ export default function CurrencyListScreen({
   const handlePress = (currency: string) => {
     const { type } = route.params;
     if (type === 'base') {
-      dispatch(changeBaseCurrency(currency));
+      // dispatch(changeBaseCurrency(currency));
     } else if (type === 'quote') {
       dispatch(changeQuoteCurrency(currency));
     }
@@ -51,12 +44,11 @@ export default function CurrencyListScreen({
   if (type === 'quote') {
     comparisonCurrency = quoteCurrency;
   }
-
   return (
     <View style={{ flex: 1 }}>
       <StatusBar translucent={false} barStyle="default" />
       <FlatList
-        data={currencies}
+        data={Object.keys(conversions[baseCurrency].rates)}
         renderItem={({ item }) => (
           <ListItem
             text={item}
