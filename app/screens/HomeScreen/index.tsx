@@ -37,7 +37,6 @@ export default function HomeScreen(): JSX.Element {
   const lastConvertedDate = conversionSelector.time_last_update_utc
     ? new Date(conversionSelector.time_last_update_utc)
     : new Date();
-  const isFetching = conversionSelector.result === 'success' ? false : true;
 
   const handlePressBaseCurrency = () => {
     navigation.navigate('CurrencyList', {
@@ -53,8 +52,8 @@ export default function HomeScreen(): JSX.Element {
     });
   };
 
-  const swipeCurrency = () => {
-    dispatch(fetchCurrencyByCode(quoteCurrency));
+  const swipeCurrency = async () => {
+    await dispatch(fetchCurrencyByCode(quoteCurrency));
     dispatch(onSwapCurrency());
   };
 
@@ -63,11 +62,7 @@ export default function HomeScreen(): JSX.Element {
     dispatch(fetchCurrencyByCode(base_code));
   }, []);
 
-  let quotePrice = '...';
-  if (!isFetching) {
-    quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2);
-  }
-
+  const quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2) ?? '...';
   return (
     <Container backgroundColor={primaryColor}>
       <StatusBar backgroundColor="blue" barStyle="light-content" />
