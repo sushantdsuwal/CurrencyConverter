@@ -7,7 +7,7 @@ export default EStyleSheet.create({
     top: 0,
     right: 0,
     '@media ios': {
-      paddingTop: 30,
+      paddingTop: 20,
     },
   },
   button: {

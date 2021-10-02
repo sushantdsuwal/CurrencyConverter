@@ -64,7 +64,9 @@ export default function HomeScreen(): JSX.Element {
 
   const quotePrice = (amount * rates[quoteCurrency] || 0).toFixed(2) ?? '...';
   return (
-    <Container>
+    <Container
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    >
       <StatusBar backgroundColor="blue" barStyle="light-content" />
       <Header onPress={() => navigation.navigate('Option')} />
       <KeyboardAvoidingView behavior="padding">
