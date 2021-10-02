@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { AppThunk, RootState } from '../store';
+import { RootState } from '../store';
 
 export interface IExchangeRateResult {
   result?: string;

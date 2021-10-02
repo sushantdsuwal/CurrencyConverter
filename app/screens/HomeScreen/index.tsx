@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { StatusBar, KeyboardAvoidingView } from 'react-native';
 
+import { ClearButton } from '~/components/common/Button';
 import { Container } from '~/components/common/Container';
 import { Header } from '~/components/common/Header';
 import { Logo } from '~/components/common/Logo';
@@ -14,6 +15,7 @@ import {
   currenciesState,
   fetchCurrencyByCode,
   onChangeCurrencyAmount,
+  onSwapCurrency,
 } from '~/redux/currencies/currenciesStateSlice';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
@@ -50,6 +52,12 @@ export default function HomeScreen(): JSX.Element {
       type: 'quote',
     });
   };
+
+  const swipeCurrency = () => {
+    dispatch(fetchCurrencyByCode(quoteCurrency));
+    dispatch(onSwapCurrency());
+  };
+
   useEffect(() => {
     const base_code = baseCurrency ?? 'USD';
     dispatch(fetchCurrencyByCode(base_code));
@@ -87,10 +95,7 @@ export default function HomeScreen(): JSX.Element {
           quote={quoteCurrency}
           conversionRate={rates[quoteCurrency] || 0}
         />
-        {/* <ClearButton
-          onPress={() => dispatch(onSwapCurrency())}
-          text="Reverse Currencies"
-        /> */}
+        <ClearButton onPress={swipeCurrency} text="Reverse Currencies" />
       </KeyboardAvoidingView>
     </Container>
   );
