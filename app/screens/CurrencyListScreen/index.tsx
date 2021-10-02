@@ -2,8 +2,9 @@ import { useNavigation } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import React from 'react';
-import { FlatList, StatusBar, View } from 'react-native';
+import { FlatList, StatusBar } from 'react-native';
 
+import { Container } from '~/components/common/Container';
 import { ListItem, Separator } from '~/components/common/List';
 import { RootStackParamList } from '~/navigator';
 import {
@@ -49,7 +50,7 @@ export default function CurrencyListScreen({
     comparisonCurrency = quoteCurrency;
   }
   return (
-    <View style={{ flex: 1 }}>
+    <Container>
       <StatusBar translucent={false} barStyle="default" />
       <FlatList
         data={Object.keys(conversions[baseCurrency].conversion_rates)}
@@ -64,6 +65,6 @@ export default function CurrencyListScreen({
         keyExtractor={item => item}
         ItemSeparatorComponent={Separator}
       />
-    </View>
+    </Container>
   );
 }

@@ -30,17 +30,9 @@ export default function App(): JSX.Element {
     <StoreProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
-          <SafeAreaView style={styles.container}>
-            <RootNavigator />
-          </SafeAreaView>
+          <RootNavigator />
         </ThemeProvider>
       </PersistGate>
     </StoreProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
