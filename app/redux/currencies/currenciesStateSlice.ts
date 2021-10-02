@@ -1,35 +1,45 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-import { RootState } from '../store';
+import { AppThunk, RootState } from '../store';
 
-export interface IConversions {
-  isFetching?: boolean;
-  base: string;
-  date: string;
-  rates: {
+export interface IExchangeRateResult {
+  result?: string;
+  documentation?: string;
+  terms_of_use?: string;
+  time_last_update_unix: Date;
+  time_last_update_utc: Date;
+  time_next_update_unix: Date;
+  time_next_update_utc: Date;
+  base_code: string;
+  conversion_rates: {
     [key: string]: number;
   };
-  [key: string]: any;
 }
 export interface ICurrenciesState {
+  status: string;
   baseCurrency: string;
   quoteCurrency: string;
   amount: number;
   conversions: {
-    [key: string]: IConversions;
+    [key: string]: IExchangeRateResult;
   };
 }
 
 const initialState: ICurrenciesState = {
+  status: '',
   baseCurrency: 'USD',
   quoteCurrency: 'GBP',
   amount: 100,
   conversions: {
     USD: {
-      isFetching: false,
-      base: 'USD',
-      date: '2017-05-31',
-      rates: {
+      result: 'success',
+      time_last_update_unix: new Date(),
+      time_last_update_utc: new Date(),
+      time_next_update_unix: new Date(),
+      time_next_update_utc: new Date(),
+      base_code: 'USD',
+      conversion_rates: {
         AUD: 1.3416,
         BGN: 1.743,
         BRL: 3.2515,
@@ -66,22 +76,34 @@ const initialState: ICurrenciesState = {
   },
 };
 
-const setConversions = (state: ICurrenciesState, conversion: IConversions) => {
-  if (state.conversions[conversion.base]) {
-    console.log('i am same');
+const setConversions = (
+  state: ICurrenciesState,
+  conversion: IExchangeRateResult,
+) => {
+  if (state.conversions[conversion.base_code]) {
     const copyConversions = { ...state.conversions };
-    copyConversions[conversion.base] = conversion;
+    copyConversions[conversion.base_code] = conversion;
     return {
       ...copyConversions,
     };
   } else {
-    console.log('i am not same');
     return {
       ...state.conversions,
-      [conversion.base]: conversion,
+      [conversion.base_code]: conversion,
     };
   }
 };
+
+export const fetchCurrencyByCode = createAsyncThunk(
+  'exchangerate/fetchCurrencyByCode',
+  async (currency_code: string) => {
+    const API_KEY = 'ac52a84b35e64f29d2a16466';
+    const currencyResponse = await axios.get<IExchangeRateResult>(
+      `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/${currency_code}`,
+    );
+    return currencyResponse.data;
+  },
+);
 
 export const currenciesStateSlice = createSlice({
   name: 'currenciesState',
@@ -97,27 +119,20 @@ export const currenciesStateSlice = createSlice({
         quoteCurrency: state.baseCurrency,
       };
     },
-    changeBaseCurrency: (state, action: PayloadAction<IConversions>) => {
-      setConversions(state, action.payload);
-      state.conversions = setConversions(state, action.payload);
-    },
     changeQuoteCurrency: (state, action: PayloadAction<string>) => {
       state.quoteCurrency = action.payload;
     },
-    updateConversion: (state, action: PayloadAction<IConversions>) => {
-      state.baseCurrency = action.payload.base;
+  },
+  extraReducers: builder => {
+    builder.addCase(fetchCurrencyByCode.fulfilled, (state, action) => {
+      state.baseCurrency = action.payload.base_code;
       state.conversions = setConversions(state, action.payload);
-    },
+    });
   },
 });
 
-export const {
-  onChangeCurrencyAmount,
-  onSwapCurrency,
-  changeBaseCurrency,
-  changeQuoteCurrency,
-  updateConversion,
-} = currenciesStateSlice.actions;
+export const { onChangeCurrencyAmount, onSwapCurrency, changeQuoteCurrency } =
+  currenciesStateSlice.actions;
 
 export const currenciesState = (state: RootState): ICurrenciesState =>
   state.currenciesState;

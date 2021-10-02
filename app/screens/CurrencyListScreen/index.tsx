@@ -7,9 +7,9 @@ import { FlatList, StatusBar, View } from 'react-native';
 import { ListItem, Separator } from '~/components/common/List';
 import { RootStackParamList } from '~/navigator';
 import {
-  changeBaseCurrency,
   changeQuoteCurrency,
   currenciesState,
+  fetchCurrencyByCode,
 } from '~/redux/currencies/currenciesStateSlice';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
@@ -30,10 +30,14 @@ export default function CurrencyListScreen({
 
   const { type } = route.params;
 
+  const getCurrencyList = async (currency_code: string) => {
+    dispatch(fetchCurrencyByCode(currency_code));
+  };
+
   const handlePress = (currency: string) => {
     const { type } = route.params;
     if (type === 'base') {
-      // dispatch(changeBaseCurrency(currency));
+      getCurrencyList(currency);
     } else if (type === 'quote') {
       dispatch(changeQuoteCurrency(currency));
     }
@@ -48,7 +52,7 @@ export default function CurrencyListScreen({
     <View style={{ flex: 1 }}>
       <StatusBar translucent={false} barStyle="default" />
       <FlatList
-        data={Object.keys(conversions[baseCurrency].rates)}
+        data={Object.keys(conversions[baseCurrency].conversion_rates)}
         renderItem={({ item }) => (
           <ListItem
             text={item}

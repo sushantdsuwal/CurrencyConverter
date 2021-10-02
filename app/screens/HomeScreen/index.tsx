@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import axios from 'axios';
 
 import React, { useEffect } from 'react';
 import { StatusBar, KeyboardAvoidingView } from 'react-native';
 
-import { ClearButton } from '~/components/common/Button';
 import { Container } from '~/components/common/Container';
 import { Header } from '~/components/common/Header';
 import { Logo } from '~/components/common/Logo';
@@ -14,9 +12,8 @@ import { InputWithButton } from '~/components/common/TextInput';
 import { RootStackParamList } from '~/navigator';
 import {
   currenciesState,
+  fetchCurrencyByCode,
   onChangeCurrencyAmount,
-  onSwapCurrency,
-  updateConversion,
 } from '~/redux/currencies/currenciesStateSlice';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
@@ -34,11 +31,11 @@ export default function HomeScreen(): JSX.Element {
     useAppSelector(currenciesState);
 
   const conversionSelector = conversions[baseCurrency] || {};
-  const rates = conversionSelector.rates || {};
-  const lastConvertedDate = conversionSelector.date
-    ? new Date(conversionSelector.date)
+  const rates = conversionSelector.conversion_rates || {};
+  const lastConvertedDate = conversionSelector.time_last_update_utc
+    ? new Date(conversionSelector.time_last_update_utc)
     : new Date();
-  const isFetching = conversionSelector.isFetching;
+  const isFetching = conversionSelector.result === 'success' ? false : true;
 
   const handlePressBaseCurrency = () => {
     navigation.navigate('CurrencyList', {
@@ -53,24 +50,9 @@ export default function HomeScreen(): JSX.Element {
       type: 'quote',
     });
   };
-
-  console.log('conversions', conversions);
-
-  const getCurrencyList = async () => {
-    try {
-      const API_KEY = '9222a6c30c7648b9279191d83dcfeda7';
-      const currencyList = await axios.get(
-        `http://data.fixer.io/api/latest?access_key=${API_KEY}`,
-      );
-      console.log('currencyList', currencyList.data);
-      dispatch(updateConversion(currencyList.data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getCurrencyList();
+    const base_code = baseCurrency ?? 'USD';
+    dispatch(fetchCurrencyByCode(base_code));
   }, []);
 
   let quotePrice = '...';
@@ -105,10 +87,10 @@ export default function HomeScreen(): JSX.Element {
           quote={quoteCurrency}
           conversionRate={rates[quoteCurrency] || 0}
         />
-        <ClearButton
+        {/* <ClearButton
           onPress={() => dispatch(onSwapCurrency())}
           text="Reverse Currencies"
-        />
+        /> */}
       </KeyboardAvoidingView>
     </Container>
   );
