@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { themeState } from '~/redux/theme/themeStateSlice';
 import { getCloser } from '~/utils';
 
-import Header from './Header';
+import AnimatedSearchHeader from './AnimatedSearchHeader';
 
 type CurrencyListScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -129,7 +129,7 @@ export default function CurrencyListScreen({
     <Container
       header={
         <Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-          <Header
+          <AnimatedSearchHeader
             {...{ headerHeight }}
             value={searchQuery}
             onChangeText={queryText => setSearchQuery(queryText)}
