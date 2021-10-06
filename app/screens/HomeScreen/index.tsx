@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import React, { useEffect } from 'react';
-import { StatusBar, KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 import { ClearButton } from '~/components/common/Button';
 import { Container } from '~/components/common/Container';

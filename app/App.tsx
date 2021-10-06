@@ -1,9 +1,8 @@
 import { PersistGate } from 'redux-persist/es/integration/react';
 
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
 import { Provider as StoreProvider } from 'react-redux';
 
 import RootNavigator from '~/navigator';
@@ -26,6 +25,9 @@ EStyleSheet.build({
 });
 
 export default function App(): JSX.Element {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <StoreProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
