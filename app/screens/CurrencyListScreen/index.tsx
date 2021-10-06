@@ -6,6 +6,7 @@ import { FlatList, StatusBar } from 'react-native';
 
 import { Container } from '~/components/common/Container';
 import { ListItem, Separator } from '~/components/common/List';
+import { NavHeader } from '~/components/common/NavHeader';
 import { RootStackParamList } from '~/navigator';
 import {
   changeQuoteCurrency,
@@ -51,6 +52,7 @@ export default function CurrencyListScreen({
   }
   return (
     <Container>
+      <NavHeader />
       <StatusBar translucent={false} barStyle="default" />
       <FlatList
         data={Object.keys(conversions[baseCurrency].conversion_rates)}

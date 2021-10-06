@@ -1,8 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
-import { View, Text, Keyboard, Animated, Platform, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Keyboard,
+  Animated,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 
 import styles from './styles';
 
@@ -68,7 +76,11 @@ class Logo extends Component {
   render() {
     const containerImageStyles = [
       styles.containerImage,
-      { width: this.state.containerImageWidth, height: this.state.containerImageWidth },
+      {
+        width: this.state.containerImageWidth,
+        height: this.state.containerImageWidth,
+        tintColor: '#FFF',
+      },
     ];
     const imageStyles = [
       styles.logo,
@@ -87,7 +99,7 @@ class Logo extends Component {
           <Animated.Image
             resizeMode="contain"
             style={imageStyles}
-            source={require('./images/logo.png')}
+            source={require('./images/logo1.png')}
           />
         </Animated.View>
         <Text style={styles.text}>Currency Converter</Text>

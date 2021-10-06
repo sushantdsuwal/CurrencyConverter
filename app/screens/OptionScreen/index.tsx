@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Container } from '~/components/common/Container';
 import { ListItem, Separator } from '~/components/common/List';
+import { NavHeader } from '~/components/common/NavHeader';
 import { RootStackParamList } from '~/navigator';
 
 const ICON_PREFIX = Platform.OS === 'ios' ? 'ios' : 'md';
@@ -22,6 +23,7 @@ export default function OptionScreen(): JSX.Element {
   const navigation = useNavigation<HomeScreenNavigationProps>();
   return (
     <Container>
+      <NavHeader />
       <ScrollView>
         <StatusBar translucent={false} barStyle="default" />
         <ListItem

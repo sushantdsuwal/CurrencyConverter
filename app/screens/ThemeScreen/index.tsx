@@ -6,6 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import { Container } from '~/components/common/Container';
 import { ListItem, Separator } from '~/components/common/List';
+import { NavHeader } from '~/components/common/NavHeader';
 import { useAppDispatch } from '~/redux/hooks';
 import { onChangePrimaryColor } from '~/redux/theme/themeStateSlice';
 
@@ -27,6 +28,7 @@ export default function ThemeScreen(): JSX.Element {
 
   return (
     <Container>
+      <NavHeader />
       <ScrollView>
         <StatusBar translucent={false} barStyle="default" />
         <ListItem
