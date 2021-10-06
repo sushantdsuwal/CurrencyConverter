@@ -67,7 +67,6 @@ export default function HomeScreen(): JSX.Element {
     <Container
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
     >
-      <StatusBar backgroundColor="blue" barStyle="light-content" />
       <Header onPress={() => navigation.navigate('Option')} />
       <KeyboardAvoidingView behavior="padding">
         <Logo tintColor={primaryColor} />

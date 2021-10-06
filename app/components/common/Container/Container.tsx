@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppSelector } from '~/redux/hooks';
@@ -11,12 +11,14 @@ import styles from './styles';
 
 interface ContainerProps {
   children: React.ReactNode;
+  header?: React.ReactChild;
   backgroundColor?: string;
   style?: StyleProp<ViewStyle>;
 }
 
 const Container = ({
   children,
+  header,
   style,
   backgroundColor,
 }: ContainerProps): JSX.Element => {
@@ -31,7 +33,11 @@ const Container = ({
 
   return (
     <SafeAreaView style={containerStyles}>
-      <View style={style && style}>{children}</View>
+      <StatusBar translucent={false} barStyle="light-content" />
+      <View style={style && style}>
+        {header && <View>{header}</View>}
+        {children}
+      </View>
     </SafeAreaView>
   );
 };

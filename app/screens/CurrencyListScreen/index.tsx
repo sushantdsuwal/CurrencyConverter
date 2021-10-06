@@ -51,9 +51,7 @@ export default function CurrencyListScreen({
     comparisonCurrency = quoteCurrency;
   }
   return (
-    <Container>
-      <NavHeader />
-      <StatusBar translucent={false} barStyle="default" />
+    <Container header={<NavHeader />}>
       <FlatList
         data={Object.keys(conversions[baseCurrency].conversion_rates)}
         renderItem={({ item }) => (

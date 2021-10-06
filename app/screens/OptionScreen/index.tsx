@@ -22,10 +22,8 @@ export type HomeScreenNavigationProps = NativeStackNavigationProp<
 export default function OptionScreen(): JSX.Element {
   const navigation = useNavigation<HomeScreenNavigationProps>();
   return (
-    <Container>
-      <NavHeader />
+    <Container header={<NavHeader />}>
       <ScrollView>
-        <StatusBar translucent={false} barStyle="default" />
         <ListItem
           text="Themes"
           onPress={() => navigation.navigate('Theme')}

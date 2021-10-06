@@ -27,10 +27,8 @@ export default function ThemeScreen(): JSX.Element {
   };
 
   return (
-    <Container>
-      <NavHeader />
+    <Container header={<NavHeader />}>
       <ScrollView>
-        <StatusBar translucent={false} barStyle="default" />
         <ListItem
           text="Blue"
           onPress={() => handlePressTheme(styles.$blue)}
